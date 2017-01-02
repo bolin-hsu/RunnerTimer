@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Interval Timer</string>
+    <string name="button_start">Start</string>
+    <string name="textview_alarm_offset">0</string>
+</resources>
