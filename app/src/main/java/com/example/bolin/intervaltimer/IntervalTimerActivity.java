@@ -1,68 +1,84 @@
 package com.example.bolin.intervaltimer;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import java.util.Date;
 
 public class IntervalTimerActivity extends AppCompatActivity {
-    //private int millisPerMinute = 60 * 1000;
-    private int millisPerMinute = 1000;
+    private static String TAG = "IntervalTimerActivity";
 
-    private Handler handler = new Handler();
+    private static int millisPerMinute = 60 * 1000;
+    //private static int millisPerMinute = 12 * 1000;
 
-    // Interval length in milli-seconds
-    private int[] alarmTimes = {
-            5,  // run
-            5,  // walk
-            10, // run
-            5,  // walk
-            10, // run
-            5,  // walk
-    };
+    /**
+     * Arrange for the activity to return at a specific time.
+     * Call finish() after calling this method().
+     * This function can be called from anywhere that has a valid Context.
+     */
+    public static void scheduleWakeup(Context ctx, int[] alarms, int index) {
+        long timeMillis = new Date().getTime() + alarms[index] * millisPerMinute;
+        Log.d(TAG, "Scheduling wakeup for " + timeMillis);
+        Intent intent = new Intent(ctx, IntervalTimerActivity.class);
+        intent.putExtra("alarm", true);
+        intent.putExtra("alarms", alarms);
+        intent.putExtra("index", index);
+        Log.d(TAG, "index " + index);
+        PendingIntent pi = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager mgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        mgr.cancel(pi);    // Cancel any previously-scheduled wakeups
+        mgr.set(AlarmManager.RTC_WAKEUP, timeMillis, pi);
 
-    private int totalOffset = 0;
-
-    private int alarmTimeIndex = 0;
-
-    class Alarm implements Runnable {
-        private Integer offset;
-        public Alarm(int offset) {
-            this.offset = offset;
-        }
-        @Override
-        public void run() {
-            ((TextView)findViewById(R.id.textview_id)).setText(offset.toString());
-            playSound();;
-        }
+        // TODO Switch to the following which need API level 19,
+        // currently our Galaxy Nexus is at API level 18.
+        //mgr.setExact(AlarmManager.RTC_WAKEUP, timeMillis, pi);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_timer);
-        playSound();
-        // Schedule all alarms
-        for (int i = 0; i < alarmTimes.length; ++i) {
-            totalOffset += alarmTimes[alarmTimeIndex++];
-            handler.postDelayed(new Alarm(totalOffset), totalOffset * millisPerMinute);
+
+        Intent intent = getIntent();
+        int[] alarms = intent.getIntArrayExtra("alarms");
+        int index = intent.getIntExtra("index", 0);
+        if ( intent.getBooleanExtra("alarm", false)) {
+            Log.d(TAG, "alarm TRUE ");
+            index++;
+        } else {
+            Log.d(TAG, "alarm FALSE ");
         }
-        // All alarms played, so destroying the current activity.
-        totalOffset += 2;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, totalOffset * millisPerMinute);
+        playSound(index);
+
+        if (index < alarms.length) {
+            IntervalTimerActivity.scheduleWakeup(this, alarms, index);
+        } else {
+            Log.d(TAG, "done");
+        }
+        finish();
     }
 
-    public void playSound() {
+//    private String[] filenames = {
+//            "ship",
+//            "one",
+//            "two",
+//            "three",
+//            "four",
+//            "five",
+//            "six"
+//    };
+
+    public void playSound(int index) {
         Resources resources = getResources();
         String packageName = getPackageName();
+        //int resID=resources.getIdentifier(filenames[index], "raw", packageName);
         int resID=resources.getIdentifier("ship", "raw", packageName);
         MediaPlayer mediaPlayer=MediaPlayer.create(this,resID);
         mediaPlayer.start();
