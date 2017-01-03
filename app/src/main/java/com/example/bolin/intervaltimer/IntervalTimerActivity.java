@@ -65,20 +65,21 @@ public class IntervalTimerActivity extends AppCompatActivity {
         finish();
     }
 
-    private String[] filenames = {
-            "ship",
-            "one",
-            "two",
-            "three",
-            "four",
-            "five",
-            "six"
-    };
+//    private String[] filenames = {
+//            "ship",
+//            "one",
+//            "two",
+//            "three",
+//            "four",
+//            "five",
+//            "six"
+//    };
 
     public void playSound(int index) {
         Resources resources = getResources();
         String packageName = getPackageName();
-        int resID=resources.getIdentifier(filenames[index], "raw", packageName);
+        //int resID=resources.getIdentifier(filenames[index], "raw", packageName);
+        int resID=resources.getIdentifier("ship", "raw", packageName);
         MediaPlayer mediaPlayer=MediaPlayer.create(this,resID);
         mediaPlayer.start();
     }
