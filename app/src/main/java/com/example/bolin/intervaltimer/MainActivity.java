@@ -1,8 +1,8 @@
 package com.example.bolin.intervaltimer;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTimer(View view) {
         Intent intent = new Intent(this, IntervalTimerActivity.class);
+        // TODO Create GUI for user to edit the alarms array
+        int[] alarms = {5, 5, 10, 5, 10, 5};
+        intent.putExtra("alarms", alarms);
         startActivity(intent);
     }
 }
