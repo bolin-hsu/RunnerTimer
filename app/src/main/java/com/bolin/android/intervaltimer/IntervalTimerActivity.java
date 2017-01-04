@@ -1,4 +1,4 @@
-package com.example.bolin.intervaltimer;
+package com.bolin.android.intervaltimer;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

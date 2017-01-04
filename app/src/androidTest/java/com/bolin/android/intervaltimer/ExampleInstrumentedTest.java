@@ -1,4 +1,4 @@
-package com.example.bolin.intervaltimer;
+package com.bolin.android.intervaltimer;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
