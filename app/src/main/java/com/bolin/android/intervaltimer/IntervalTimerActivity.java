@@ -79,7 +79,7 @@ public class IntervalTimerActivity extends AppCompatActivity {
         Resources resources = getResources();
         String packageName = getPackageName();
         //int resID=resources.getIdentifier(filenames[index], "raw", packageName);
-        int resID=resources.getIdentifier("hawk", "raw", packageName);
+        int resID=resources.getIdentifier("hawk2", "raw", packageName);
         MediaPlayer mediaPlayer=MediaPlayer.create(this,resID);
         mediaPlayer.start();
     }
