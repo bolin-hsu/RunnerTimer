@@ -1,4 +1,4 @@
-package com.example.bolin.intervaltimer;
+package com.bolin.android.intervaltimer;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -79,7 +79,7 @@ public class IntervalTimerActivity extends AppCompatActivity {
         Resources resources = getResources();
         String packageName = getPackageName();
         //int resID=resources.getIdentifier(filenames[index], "raw", packageName);
-        int resID=resources.getIdentifier("ship", "raw", packageName);
+        int resID=resources.getIdentifier("hawk2", "raw", packageName);
         MediaPlayer mediaPlayer=MediaPlayer.create(this,resID);
         mediaPlayer.start();
     }
